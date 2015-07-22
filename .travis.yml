@@ -1,9 +1,13 @@
+language: node_js
+node_js:
+  - "0.12"
+  - "0.10"
+  - "iojs"
+  - "iojs-v2.4.0"
+
 services:
   - mongodb
 
-language: node_js
-node_js:
-  - "0.8"
-  - "0.10"
-
-script: "npm test"
+script:
+    - npm install
+    - npm test
