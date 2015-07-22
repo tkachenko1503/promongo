@@ -25,6 +25,6 @@ db.a.insert([{name: "Squirtle"}, {name: "Charmander"}, {name: "Bulbasaur"}])
 		
 		return db.a.remove();
 	})
-	.done(function () {
+	.then(function () {
 		db.close();
 	});

@@ -6,6 +6,8 @@ var Readable = require('stream').Readable || require('readable-stream');
 var DriverCollection = mongodb.Collection.prototype;
 var DriverDb = mongodb.Db.prototype;
 
+// @todo обработка ошибок в колбэках внутри then
+// @todo брать монгу из родительского require
 
 /**
  * Executes the given function for each method in the old prototype, which doesn't have a
@@ -65,10 +67,13 @@ var nodeify = function (promise, callback) {
             return value;
         }, function (error) {
             callback(error);
-        });
+        })
+		.catch(function(error){
+			makeError(error);
+		});
     }
     return promise;
-}
+};
 
 var nApply = function (fn, args, ctx) {
 	return new Promise(function (resolve, reject) {
@@ -77,7 +82,7 @@ var nApply = function (fn, args, ctx) {
 			if (error) {
 				reject(error);
 			} else if (arguments.length > 2) {
-				resolve(array_slice(arguments, 1));
+				resolve(Array.prototype.slice.call(arguments, 1));
 			} else {
 				resolve(value);
 			}
@@ -86,7 +91,7 @@ var nApply = function (fn, args, ctx) {
 		args.push(resolver);
 		fn.apply(ctx, args);
 	});
-}
+};
 
 var nBind = function (fn, ctx) {
 	return function () {
@@ -94,6 +99,16 @@ var nBind = function (fn, ctx) {
 
 		return nApply(fn, args, ctx);
 	}
+};
+
+function makeError(error) {
+    process.once('uncaughtException', function(err) {
+        process.exit(0);
+    });
+
+	process.nextTick(function () {
+		throw this.error;
+	}.bind({error: error}));
 }
 
 // Proxy for the native cursor prototype that normalizes method names and
@@ -303,9 +318,12 @@ Collection.prototype.find = function() {
 
 Collection.prototype.findOne = function() { // see http://www.mongodb.org/display/DOCS/Queries+and+Cursors
 	var cargs = splitArgs(arguments);
-	return nodeify(this.find.apply(this, cargs.args)
+	var promise = this.find
+		.apply(this, cargs.args)
 		.limit(1)
-		.next(), cargs.callback);
+		.next();
+
+	return nodeify(promise, cargs.callback);
 };
 
 Collection.prototype.findAndModify = function(options, callback) {

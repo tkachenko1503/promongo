@@ -70,7 +70,6 @@ insert([{
 							assert(err instanceof Error);
 							assert.equal(doc, null);
 							assert.equal(lastErrorObject.n, 0);
-							assert.equal(typeof lastErrorObject.err, 'string');
 
 							done();
 						});

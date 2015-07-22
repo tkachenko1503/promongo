@@ -13,7 +13,6 @@ db.b.c.remove()
 		assert.equal(docs[0].hello, "world");
 		return db.b.c.remove();
 	})
-	.fin(function () {
+	.then(function () {
 		db.close();
-	})
-	.done();
+	});

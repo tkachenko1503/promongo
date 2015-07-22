@@ -16,6 +16,6 @@ db.a.save({hello: "world"})
 
 		return db.a.remove();
 	})
-	.done(function () {
+	.then(function () {
 		db.close();
 	});

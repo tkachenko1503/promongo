@@ -5,17 +5,16 @@ var db = mongojs('test', ['test123']);
 var errCalled = false;
 
 db.test123.drop()
-	.fin(function() {
+	.then(function() {
 		db.createCollection('test123')
 			.then(function () {
 				return db.createCollection('test123');
 			})
-			.fail(function () {
+			.catch(function () {
 				errCalled = true;
 			})
-			.fin(function () {
+			.then(function () {
 				assert.ok(errCalled);
 				db.close();
-			})
-			.done();
+			});
 	});

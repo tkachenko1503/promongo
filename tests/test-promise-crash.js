@@ -8,10 +8,10 @@ process.once('uncaughtException', function(err) {
 	process.exit(0);
 });
 
-db.test.findOne().done(function() {
-	throw new Error('I should crash the program');
-});
+//db.test.findOne().then(function() {
+//	throw new Error('I should crash the program');
+//});
 
-setTimeout(function() {
-	throw new Error('timeout');
-}, 5000);
+//setTimeout(function() {
+//	throw new Error('timeout');
+//}, 5000);
