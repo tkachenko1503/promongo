@@ -1,0 +1,16 @@
+{
+  "name": "promongo",
+  "version": "0.0.1",
+  "description": "MongoDB driver wrapped with native promises",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "tkachenko1503",
+  "license": "MIT",
+  "dependencies": {
+    "readable-stream": "^2.0.2",
+    "mongodb": "1.4.0",
+    "promised-mongo": "git://github.com/gordonmleigh/promised-mongo.git#v0.11.6"
+  }
+}
