@@ -25,6 +25,12 @@ if (args.length === 1){
 	}
 }
 
+process.once('uncaughtException', function(err) {
+	console.log(err.message);
+    console.error('\n      '+(''+err.stack).split('\n').join('\n      ')+'\n');
+	process.exit(0);
+});
+
 var loop = function() {
 	var next = tests.shift();
 
