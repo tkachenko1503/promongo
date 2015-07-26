@@ -14,7 +14,7 @@ insert([{
 }], function(db, done) {
     var cursor = db.a.find();
     cursor.explain(function(err, result) {
-        console.log('explain- ', result.executionStats.totalDocsExamined);
+        console.log('explain- ', result.executionStats);
         assert.equal(result.executionStats.totalDocsExamined, 1);
         done();
     });
