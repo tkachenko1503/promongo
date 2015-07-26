@@ -4,42 +4,6 @@ var fs = require('fs');
 var path = require('path');
 var exec = require('child_process').exec;
 
-//================================================================
-var assert = require('assert');
-var mongojs = require('../index');
-var db = mongojs('test', ['users']);
-
-db.users.drop()
-    .then(function () {
-        return db.users.insert([
-            {
-                name: 'first',
-                age: 23
-            }, {
-                name: 'second',
-                age: 15
-            }
-        ])
-    })
-    .then(function () {
-        return db.users.createIndex('age');
-    })
-    .then(function (indexName) {
-        assert.equal(indexName, 'age_1');
-
-        return db.users.find().hint('age_1');
-    }).then(function (res) {
-        assert.equal(res.length, 2);
-        assert.ok(res[0]._id);
-        assert.ok(res[1]._id);
-        db.close();
-    })
-		.catch(function (error) {
-			console.log(error);
-		});
-
-//================================================================
-
 var TIMEOUT = 20000;
 
 var tests = fs.readdirSync(__dirname).filter(function(file) {
@@ -64,7 +28,10 @@ if (args.length === 1){
 var loop = function() {
 	var next = tests.shift();
 
-	if (!next) return console.log('\033[32m[ok]\033[39m  all ok');
+	if (!next) {
+        console.log('\033[32m[ok]\033[39m  all ok');
+        return process.exit(0);
+    }
 
 	exec('node '+path.join(__dirname,next), {timeout:TIMEOUT}, function(err) {
 		cnt++;
