@@ -9,4 +9,5 @@ services:
 
 script:
     - npm install
+    - mongod --version
     - npm test
