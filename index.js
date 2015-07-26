@@ -59,15 +59,16 @@ var splitArgs = function (args) {
 
 var nodeify = function (promise, callback) {
   if (callback) {
-    promise = promise.then(function (value) {
-      callback(null, value);
-      return value;
-    }, function (error) {
-      callback(error);
-    })
-    .catch(function (error) {
-      makeError(error);
-    });
+    promise = promise
+      .then(function (value) {
+        callback(null, value);
+        return value;
+      }, function (error) {
+        callback(error);
+      })
+      .catch(function (error) {
+        makeError(error);
+      });
   }
   return promise;
 };
@@ -131,25 +132,25 @@ Cursor.prototype.forEach = function (fn) {
   if (fn.length == 1) {
     //the fn is promise type (function (doc) {...})
     return this._get()
-    .then(function (cursor) {
-      return new Promise(function (resolve, reject) {
-        cursor.each(function (err, doc) {
-          if (err) {
-            reject(err);
-          } else if (doc) {
-            fn(doc);
-          } else {
-            resolve();
-          }
+      .then(function (cursor) {
+        return new Promise(function (resolve, reject) {
+          cursor.each(function (err, doc) {
+            if (err) {
+              reject(err);
+            } else if (doc) {
+              fn(doc);
+            } else {
+              resolve();
+            }
+          });
         });
       });
-    });
   } else {
     //the fn is probably the old type (function (err, doc) {...})
     this._get()
-    .then(function (cursor) {
-      cursor.each(fn);
-    });
+      .then(function (cursor) {
+        cursor.each(fn);
+      });
   }
 };
 
@@ -189,9 +190,9 @@ Cursor.prototype.destroy = function () {
 
 Cursor.prototype.map = function (mapfn, callback) {
   var theneble = this.toArray()
-  .then(function (arr) {
-    return arr.map(mapfn);
-  });
+    .then(function (arr) {
+      return arr.map(mapfn);
+    });
 
   return nodeify(theneble, callback);
 };
@@ -212,9 +213,9 @@ Cursor.prototype._apply = function (fn, args) {
   var cargs = splitArgs(args);
   // return promise, call the callback if specified.
   return nodeify(this._get()
-  .then(function (cursor) {
-    return nApply(cursor[fn], cargs.args, cursor);
-  }), cargs.callback);
+    .then(function (cursor) {
+      return nApply(cursor[fn], cargs.args, cursor);
+    }), cargs.callback);
 };
 
 Cursor.prototype._read = function () { // 0.10 stream support (0.8 compat using readable-stream)
@@ -242,10 +243,10 @@ Cursor.prototype.hint = function (index) {
   var self = this;
 
   return this._get()
-  .then(function (cursor) {
-    cursor.addQueryModifier('$hint', index);
-    return self;
-  });
+    .then(function (cursor) {
+      cursor.addQueryModifier('$hint', index);
+      return self;
+    });
 };
 
 // Proxy for the native collection prototype that normalizes method names and
@@ -327,9 +328,9 @@ Collection.prototype.find = function () {
 Collection.prototype.findOne = function () { // see http://www.mongodb.org/display/DOCS/Queries+and+Cursors
   var cargs = splitArgs(arguments);
   var promise = this.find
-  .apply(this, cargs.args)
-  .limit(1)
-  .next();
+    .apply(this, cargs.args)
+    .limit(1)
+    .next();
 
   return nodeify(promise, cargs.callback);
 };
@@ -407,13 +408,13 @@ Collection.prototype.insert = function () {
   var cargs = splitArgs(arguments);
   return nodeify(this
     ._apply(DriverCollection.insert, cargs.args)
-    .then(function (result) {
-      if (Array.isArray(cargs.args[0])) {
-        return result.ops;
-      } else {
-        return result.ops[0];
-      }
-    }), cargs.callback);
+      .then(function (result) {
+        if (Array.isArray(cargs.args[0])) {
+          return result.ops;
+        } else {
+          return result.ops[0];
+        }
+      }), cargs.callback);
 };
 
 Collection.prototype.save = function () {
