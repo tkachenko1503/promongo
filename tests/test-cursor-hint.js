@@ -2,7 +2,7 @@ var assert = require('assert');
 var mongojs = require('../index');
 var db = mongojs('test', ['users']);
 
-db.users.drop()
+db.users.remove()
     .then(function () {
         return db.users.insert([
             {
