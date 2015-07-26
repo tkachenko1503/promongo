@@ -6,9 +6,11 @@ insert([{
 }, {
 	hello:'world2'
 }], function(db, done) {
-	db.a.find({hello:'world2'}).toArray().done(function(docs) {
-		assert.equal(docs.length, 1);
-		assert.equal(docs[0].hello, 'world2');
-		done();
-	});
+	db.a.find({hello:'world2'})
+		.toArray()
+		.then(function(docs) {
+			assert.equal(docs.length, 1);
+			assert.equal(docs[0].hello, 'world2');
+			done();
+		});
 });

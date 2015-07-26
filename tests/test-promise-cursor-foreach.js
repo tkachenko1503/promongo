@@ -16,7 +16,6 @@ insert([{
       .then(function () {
         assert.equal(i, 3);
         done();
-      })
-      .done();
+      });
 });
 

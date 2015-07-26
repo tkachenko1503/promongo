@@ -35,6 +35,5 @@ insert([{
 		.then(function(res) {
 			assert.equal(res.n, 4);
 			done();
-		})
-		.done();
+		});
 });

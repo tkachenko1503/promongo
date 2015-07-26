@@ -6,9 +6,10 @@ insert([{
 },{
 	hello:'world2'
 }], function(db, done) {
-	db.a.findOne().done(function(doc) {
-		assert.equal(typeof doc, 'object');
-		assert.ok(doc.hello === 'world1' || doc.hello === 'world2');
-		done();
-	});
+	db.a.findOne()
+		.then(function(doc) {
+			assert.equal(typeof doc, 'object');
+			assert.ok(doc.hello === 'world1' || doc.hello === 'world2');
+			done();
+		});
 });

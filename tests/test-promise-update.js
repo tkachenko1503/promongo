@@ -6,7 +6,7 @@ insert([{
 }], function(db, done) {
 	db.a.update({hello:'world'}, {$set:{hello:'verden'}})
 		.then(function(lastErrorObject) {
-			assert.equal(lastErrorObject.updatedExisting, true);
+			assert.equal(lastErrorObject.ok, true);
 			assert.equal(lastErrorObject.n, 1);
 
 			return db.a.findOne();
@@ -14,6 +14,5 @@ insert([{
 		.then(function(doc) {
 			assert.equal(doc.hello, 'verden');
 			done();
-		})
-		.done();
+		});
 });

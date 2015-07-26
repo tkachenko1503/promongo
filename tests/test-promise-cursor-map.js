@@ -14,7 +14,6 @@ insert([{
 		assert.equal(res[0], 'world1');
 		assert.equal(res[1], 'world2');
 		done();
-	})
-	.done();
+	});
 });
 

@@ -8,9 +8,8 @@ insert([{
 }], function(db, done) {
 	var cursor = db.a.find();
 	cursor.explain().then(function(result) {
-		assert.equal(result.nscannedObjects, 2);
+		assert.equal(result.executionStats.totalDocsExamined, 1);
 		done();
 	})
-  .done();
 });
 

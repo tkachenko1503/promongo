@@ -10,6 +10,5 @@ insert([{
 		assert.equal(docs[0].hello, undefined);
 		assert.equal(docs[0].another, 'value');
 		done();
-	})
-  .done();
+	});
 });

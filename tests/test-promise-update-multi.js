@@ -8,7 +8,7 @@ insert([{
 }], function(db, done) {
 	db.a.update({}, {$set:{updated:true}}, {multi:true})
 		.then(function(lastErrorObject) {
-			assert.equal(lastErrorObject.updatedExisting, true);
+			assert.equal(lastErrorObject.nModified, 2);
 			assert.equal(lastErrorObject.n, 2);
 			return db.a.find().toArray();
 		})
@@ -19,6 +19,5 @@ insert([{
 			assert.ok(docs[1].updated);
 			assert.equal(docs[1].hello, 'world2');
 			done();
-		})
-		.done();
+		});
 });

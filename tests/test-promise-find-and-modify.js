@@ -14,8 +14,8 @@ insert([{
 		update: { $set: { hello: 'world' } },
 	})
 	.then(function(doc) {
-		assert.equal(doc.id, 1);
-		assert.equal(doc.hello, 'you');
+		assert.equal(doc.value.id, 1);
+		assert.equal(doc.value.hello, 'you');
 
 		// Update and find the new document
 		return db.a.findAndModify({
@@ -25,8 +25,8 @@ insert([{
 		});
 	})
 	.then(function(doc) {
-		assert.equal(doc.id, 2);
-		assert.equal(doc.hello, 'me');
+		assert.equal(doc.value.id, 2);
+		assert.equal(doc.value.hello, 'me');
 
 		// Remove and find document
 		return db.a.findAndModify({
@@ -35,7 +35,7 @@ insert([{
 		});
 	})
 	.then(function(doc) {
-		assert.equal(doc.id, 1);
+		assert.equal(doc.value.id, 1);
 
 		// Insert document using upsert
 		return db.a.findAndModify({
@@ -46,8 +46,8 @@ insert([{
 		});
 	})
 	.then(function(doc) {
-		assert.equal(doc.id, 3);
-		assert.equal(doc.hello, 'girl');
+		assert.equal(doc.value.id, 3);
+		assert.equal(doc.value.hello, 'girl');
 
 		// Find non existing document
 		return db.a.findAndModify({
@@ -61,9 +61,8 @@ insert([{
 			update: { $illigal: 1 }
 		});
 	})
-	.fail(function(err) {
+	.catch(function(err) {
 		assert(err instanceof Error);
 		done();
-	})
-	.done();
+	});
 });

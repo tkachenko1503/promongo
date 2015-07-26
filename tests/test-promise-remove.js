@@ -29,6 +29,5 @@ insert([{
 		.then(function(docs) {
 			assert.equal(docs.length, 0);
 			done();
-		})
-		.done();
+		});
 });

@@ -17,7 +17,6 @@ insert([{
 	.then(function(theothersize) {
 		assert.equal(theothersize, 2);
 		done();
-	})
-	.done();
+	});
 });
 

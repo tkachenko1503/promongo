@@ -8,7 +8,7 @@ insert([{
 	db.a.update({hello:'world'}, {$set:{hello:'verden'}}, function(err, lastErrorObject) {
 		assert.ok(!sync);
 		assert.ok(!err);
-		assert.equal(lastErrorObject.updatedExisting, true);
+		assert.equal(lastErrorObject.nModified, 1);
 		assert.equal(lastErrorObject.n, 1);
 
 		done();

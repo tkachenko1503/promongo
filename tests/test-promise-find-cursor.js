@@ -9,15 +9,16 @@ insert([{
 	var cursor = db.a.find();
 	var runs = 0;
 
-	cursor.next().done(function loop(doc) {
-		if (!doc) {
-			assert.equal(runs, 2);
-			done();
-			return;
-		}
-		assert.ok(doc.hello === 'world1' || doc.hello === 'world2');
-		assert.equal(typeof doc, 'object');
-		runs++;
-		cursor.next().then(loop);
-	});
+	cursor.next()
+		.then(function loop(doc) {
+			if (!doc) {
+				assert.equal(runs, 2);
+				done();
+				return;
+			}
+			assert.ok(doc.hello === 'world1' || doc.hello === 'world2');
+			assert.equal(typeof doc, 'object');
+			runs++;
+			cursor.next().then(loop);
+		});
 });
