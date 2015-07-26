@@ -308,9 +308,9 @@ Collection.prototype.find = function () {
 
   var getcursor = thunk(function () {
     return self._get()
-    .then(function (collection) {
-      return nApply(collection.find, cargs.args, collection);
-    });
+      .then(function (collection) {
+        return nApply(collection.find, cargs.args, collection);
+      });
   });
 
   if (cargs.callback) {
@@ -377,19 +377,20 @@ Collection.prototype.remove = function () {
 
 
   if (args.length > 1 && args[1] === true) { // the justOne parameter
-    return this.findOne(args[0]).then(function (doc) {
-      if (!doc) {
-        return 0;
-      }
-      var args = [doc];
-      if (cb) {
-        args.push(cb);
-      }
-      return self._apply(DriverCollection.remove, args);
-    })
-    .then(function (result) {
-      return result.result;
-    });
+    return this.findOne(args[0])
+      .then(function (doc) {
+        if (!doc) {
+          return 0;
+        }
+        var args = [doc];
+        if (cb) {
+          args.push(cb);
+        }
+        return self._apply(DriverCollection.remove, args);
+      })
+      .then(function (result) {
+        return result.result;
+      });
   } else {
     if (args.length === 0) {
       args = [{}];
@@ -661,7 +662,7 @@ Database.prototype._apply = function (fn, args) {
 };
 
 Database.prototype.db = function (dbName, callback) {
-  return this._get()
+  return nodeify(this._get()
     .then(function (db) {
       var getdb = thunk(function () {
         var func = function () {
@@ -692,7 +693,7 @@ Database.prototype.db = function (dbName, callback) {
       that.ObjectId = mongodb.ObjectID;
 
       return that;
-    }).nodeify(callback);
+    }), callback);
 };
 
 forEachMethod(DriverDb, Database.prototype, function (methodName, fn) {
