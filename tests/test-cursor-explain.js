@@ -9,7 +9,7 @@ insert([{
 	var cursor = db.a.find();
 	cursor.explain(function(err, result) {
 		console.log('explain- ', result.executionStats.totalDocsExamined);
-		assert.equal(result.executionStats.totalDocsExamined, 2);
+		assert.equal(result.executionStats.totalDocsExamined, 1);
 		done();
 	});
 });

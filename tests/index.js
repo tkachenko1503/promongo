@@ -25,12 +25,6 @@ if (args.length === 1){
 	}
 }
 
-process.once('uncaughtException', function(err) {
-	console.log(err.message);
-    console.error('\n      '+(''+err.stack).split('\n').join('\n      ')+'\n');
-	process.exit(0);
-});
-
 var loop = function() {
 	var next = tests.shift();
 
@@ -41,6 +35,7 @@ var loop = function() {
 
 		if (err) {
 			console.error('\033[31m[err]\033[39m '+cnt+'/'+all+' - '+next);
+			console.error('Message - ', err.message);
 			console.error('\n      '+(''+err.stack).split('\n').join('\n      ')+'\n');
 			return process.exit(1);
 		}
