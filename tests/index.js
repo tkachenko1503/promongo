@@ -4,6 +4,22 @@ var fs = require('fs');
 var path = require('path');
 var exec = require('child_process').exec;
 
+var assert = require('assert');
+var insert = require('./insert');
+
+insert([{
+    hello:'world1'
+},{
+    hello:'world2'
+}], function(db, done) {
+    var cursor = db.a.find();
+    cursor.explain(function(err, result) {
+        console.log('explain- ', result.executionStats.totalDocsExamined);
+        assert.equal(result.executionStats.totalDocsExamined, 1);
+        done();
+    });
+});
+
 var TIMEOUT = 20000;
 
 var tests = fs.readdirSync(__dirname).filter(function(file) {
