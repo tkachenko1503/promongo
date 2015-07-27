@@ -211,6 +211,7 @@ Cursor.prototype.then = function () {
 Cursor.prototype._apply = function (fn, args) {
   // separate callback and args.
   var cargs = splitArgs(args);
+
   // return promise, call the callback if specified.
   return nodeify(this._get()
     .then(function (cursor) {
@@ -227,8 +228,12 @@ Cursor.prototype._read = function () { // 0.10 stream support (0.8 compat using 
 };
 
 Cursor.prototype._config = function (fn, args) {
-  var cargs = splitArgs(args),
-  p = this._apply(fn, cargs.args);
+  var cargs = splitArgs(args);
+
+  this._get()
+    .then(function (cursor) {
+      return cursor[fn].apply(cursor, cargs.args);
+    });
 
   // if callback is specified, toArray() will be automatically called
   // if using promises, toArray() will have to be called manually
